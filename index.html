@@ -598,16 +598,41 @@
       return;
     }
 
-    var body = new URLSearchParams();
-    body.append('payload', JSON.stringify(data));
+    // iPhoneを含む外部ブラウザからも確実にGASへ到達するよう、
+    // fetch(no-cors)ではなく標準のフォームPOSTを使用します。
+    var frameName = 'gasSubmitFrame_' + Date.now();
+    var iframe = document.createElement('iframe');
+    iframe.name = frameName;
+    iframe.style.display = 'none';
 
-    fetch(GAS_ENDPOINT, {
-      method: 'POST',
-      mode: 'no-cors',
-      body: body
-    })
-      .then(showSuccess)
-      .catch(showFailure);
+    var postForm = document.createElement('form');
+    postForm.method = 'POST';
+    postForm.action = GAS_ENDPOINT;
+    postForm.target = frameName;
+    postForm.acceptCharset = 'UTF-8';
+    postForm.style.display = 'none';
+
+    var payloadInput = document.createElement('input');
+    payloadInput.type = 'hidden';
+    payloadInput.name = 'payload';
+    payloadInput.value = JSON.stringify(data);
+    postForm.appendChild(payloadInput);
+
+    document.body.appendChild(iframe);
+    document.body.appendChild(postForm);
+
+    try {
+      postForm.submit();
+      window.setTimeout(function() {
+        showSuccess();
+        postForm.remove();
+        iframe.remove();
+      }, 1800);
+    } catch (err) {
+      postForm.remove();
+      iframe.remove();
+      showFailure(err);
+    }
   }
 </script>
 
