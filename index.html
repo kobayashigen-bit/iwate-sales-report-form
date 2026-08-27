@@ -73,15 +73,44 @@
     textarea { min-height: 90px; resize: vertical; }
     .grid2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; }
     .grid2 > * { min-width: 0; }
+    .date-input-frame {
+      width: 100%;
+      min-width: 0;
+      max-width: 100%;
+      overflow: hidden;
+      border: 1px solid #dadce0;
+      border-radius: 4px;
+      background: #fff;
+    }
+    .date-input-frame input[type="date"] {
+      display: block;
+      width: 100%;
+      min-width: 0;
+      max-width: 100%;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+    }
+    .date-input-frame:focus-within {
+      border-color: #1a73e8;
+      box-shadow: 0 0 0 2px rgba(26,115,232,0.15);
+    }
     @media (max-width: 480px) {
       .date-time-grid { grid-template-columns: minmax(0, 1fr); }
       .date-time-grid > .field { min-width: 0; }
-      .date-time-grid input[type="date"],
+      .date-input-frame,
       .date-time-grid select {
         display: block;
         width: 100%;
         min-width: 0;
         max-width: 100%;
+      }
+      .date-input-frame input[type="date"] {
+        -webkit-appearance: none;
+        appearance: none;
+        inline-size: 100%;
+        min-inline-size: 0;
+        max-inline-size: 100%;
       }
     }
     .prospect-details { display: none; }
@@ -183,8 +212,10 @@
 
     <div class="grid2 date-time-grid">
       <div class="field">
-        <label class="field-label required">日付</label>
-        <input type="date" id="actDate" required>
+        <label class="field-label required" for="actDate">日付</label>
+        <div class="date-input-frame">
+          <input type="date" id="actDate" required>
+        </div>
       </div>
       <div class="field">
         <label class="field-label required">時間帯</label>
