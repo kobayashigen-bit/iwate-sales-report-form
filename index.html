@@ -56,6 +56,8 @@
     .help { font-size: 0.78rem; color: #777; margin-bottom: 3px; }
     select, input[type="text"], input[type="number"], input[type="date"], textarea {
       width: 100%;
+      min-width: 0;
+      max-width: 100%;
       padding: 9px 11px;
       border: 1px solid #dadce0;
       border-radius: 4px;
@@ -69,7 +71,11 @@
     }
     select:disabled { background: #f5f5f5; color: #999; }
     textarea { min-height: 90px; resize: vertical; }
-    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .grid2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; }
+    .grid2 > * { min-width: 0; }
+    @media (max-width: 480px) {
+      .date-time-grid { grid-template-columns: 1fr; }
+    }
     .prospect-details { display: none; }
     .prospect-details.active { display: block; }
     .prospect-detail {
@@ -167,7 +173,7 @@
       </div>
     </div>
 
-    <div class="grid2">
+    <div class="grid2 date-time-grid">
       <div class="field">
         <label class="field-label required">日付</label>
         <input type="date" id="actDate" required>
