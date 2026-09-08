@@ -393,19 +393,63 @@
 </div>
 
 <script>
+  // 通信に失敗した場合も、直近の有効スタッフだけを表示するための予備データです。
   window.MASTER_DATA = {
     "近畿1": {
       "高槻": ["藤原","内川","金子"],
-      "京都": ["町田","冨鶴","尾本","山本","藤原","柴田","沖","辻村"],
-      "茨木": ["上治"],
-      "新大阪": ["谷添","加来","飯田","岩","川原","水落","松丸","瀧","冨髙","前川","澤井","伊集院"],
-      "尼崎": ["竹田","田浦","藤元"]
+      "京都": ["冨鶴","尾本","山本","藤原","柴田","沖","辻村"],
+      "新大阪": ["冨髙","前川","澤井","伊集院"],
+      "尼崎": ["田浦","藤元"]
     }
   };
 </script>
 <script>
   var MASTER = window.MASTER_DATA || null;
   var GAS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbzPVhV82WWSVr39_WTW92gfHy68MDQfKFOPZGlAknN0ttWRo1iY6BcDfY-hWPsQaigqLA/exec';
+
+  // 担当者メールシートのE列が「〇」または「○」のスタッフだけを読み込みます。
+  // JSONPを使うことで、GitHub Pagesからもログインなしで取得できます。
+  function loadActiveStaffMaster() {
+    return new Promise(function(resolve, reject) {
+      var callbackName = 'receiveActiveStaffMaster_' + Date.now();
+      var script = document.createElement('script');
+      var timeoutId = window.setTimeout(function() {
+        cleanup();
+        reject(new Error('担当者一覧の読み込みがタイムアウトしました'));
+      }, 8000);
+
+      function cleanup() {
+        window.clearTimeout(timeoutId);
+        if (script.parentNode) script.parentNode.removeChild(script);
+        try {
+          delete window[callbackName];
+        } catch (err) {
+          window[callbackName] = undefined;
+        }
+      }
+
+      window[callbackName] = function(response) {
+        if (response && response.ok && response.master && response.master['近畿1']) {
+          MASTER = response.master;
+          cleanup();
+          resolve();
+          return;
+        }
+        cleanup();
+        reject(new Error('有効な担当者一覧を取得できませんでした'));
+      };
+
+      script.onerror = function() {
+        cleanup();
+        reject(new Error('担当者一覧の通信に失敗しました'));
+      };
+      script.src = GAS_ENDPOINT +
+        '?action=activeStaffMaster&area=' + encodeURIComponent('近畿1') +
+        '&callback=' + encodeURIComponent(callbackName) +
+        '&_=' + Date.now();
+      document.head.appendChild(script);
+    });
+  }
 
   function initializeAreaOptions() {
     var areaEl = document.getElementById('area');
@@ -422,7 +466,8 @@
     areaEl.disabled = false;
   }
 
-  initializeAreaOptions();
+  // 最新の有効スタッフを優先し、取得できない場合だけ上記の予備データを使います。
+  loadActiveStaffMaster().then(initializeAreaOptions, initializeAreaOptions);
 
   function onAreaChange() {
     var area     = document.getElementById('area').value;
