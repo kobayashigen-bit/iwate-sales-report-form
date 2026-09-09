@@ -571,7 +571,7 @@
           '</select>' +
         '</div>' +
         '<div class="field">' +
-          '<label class="field-label required" for="prospectConversation' + i + '">見込の理由（会話内容）</label>' +
+          '<label class="field-label required" for="prospectConversation' + i + '">メモ（会話内容）</label>' +
           '<textarea class="prospect-conversation" id="prospectConversation' + i + '" required placeholder="会話内容など、その見込ランクにした理由を記入してください"></textarea>' +
         '</div>';
       container.appendChild(detail);
@@ -606,7 +606,7 @@
     });
 
     if (prospectDetails.some(function(detail) { return !detail.name || !detail.rank || !detail.conversation; })) {
-      alert('見込詳細の「名前」「見込ランク」「見込の理由（会話内容）」をすべて入力してください。');
+      alert('見込詳細の「名前」「見込ランク」「メモ（会話内容）」をすべて入力してください。');
       var firstMissing = document.querySelector('.prospect-name:invalid, .prospect-rank:invalid, .prospect-conversation:invalid');
       if (firstMissing) firstMissing.focus();
       return;
