@@ -129,6 +129,8 @@
       margin-bottom: 12px;
     }
     .prospect-detail .field:last-child { margin-bottom: 0; }
+    .next-visit-date-field { display: none; }
+    .next-visit-date-field.active { display: block; }
     .checkbox-row {
       display: flex;
       flex-wrap: wrap;
@@ -544,7 +546,9 @@
       return {
         name: detail.querySelector('.prospect-name').value,
         rank: detail.querySelector('.prospect-rank').value,
-        conversation: detail.querySelector('.prospect-conversation').value
+        conversation: detail.querySelector('.prospect-conversation').value,
+        nextVisitPlan: detail.querySelector('.next-visit-plan').value,
+        nextVisitDate: detail.querySelector('.next-visit-date').value
       };
     });
 
@@ -572,7 +576,20 @@
         '</div>' +
         '<div class="field">' +
           '<label class="field-label required" for="prospectConversation' + i + '">メモ（会話内容）</label>' +
-          '<textarea class="prospect-conversation" id="prospectConversation' + i + '" required placeholder="会話内容など、その見込ランクにした理由を記入してください"></textarea>' +
+          '<textarea class="prospect-conversation" id="prospectConversation' + i + '" required placeholder="会話内容などを記入してください"></textarea>' +
+        '</div>' +
+        '<div class="field">' +
+          '<label class="field-label required" for="nextVisitPlan' + i + '">次回訪問予定日</label>' +
+          '<select class="next-visit-plan" id="nextVisitPlan' + i + '" required onchange="toggleNextVisitDate(this)">' +
+            '<option value="未定">未定</option>' +
+            '<option value="予定日を選択する">予定日を選択する</option>' +
+          '</select>' +
+        '</div>' +
+        '<div class="field next-visit-date-field">' +
+          '<label class="field-label required" for="nextVisitDate' + i + '">予定日</label>' +
+          '<div class="date-input-frame">' +
+            '<input type="date" class="next-visit-date" id="nextVisitDate' + i + '">' +
+          '</div>' +
         '</div>';
       container.appendChild(detail);
 
@@ -580,8 +597,21 @@
         detail.querySelector('.prospect-name').value = saved[i].name;
         detail.querySelector('.prospect-rank').value = saved[i].rank;
         detail.querySelector('.prospect-conversation').value = saved[i].conversation;
+        detail.querySelector('.next-visit-plan').value = saved[i].nextVisitPlan || '未定';
+        detail.querySelector('.next-visit-date').value = saved[i].nextVisitDate || '';
+        toggleNextVisitDate(detail.querySelector('.next-visit-plan'));
       }
     }
+  }
+
+  function toggleNextVisitDate(selectEl) {
+    var detail = selectEl.closest('.prospect-detail');
+    var dateField = detail.querySelector('.next-visit-date-field');
+    var dateInput = detail.querySelector('.next-visit-date');
+    var needsDate = selectEl.value === '予定日を選択する';
+    dateField.classList.toggle('active', needsDate);
+    dateInput.required = needsDate;
+    if (!needsDate) dateInput.value = '';
   }
 
   function handleSubmit() {
@@ -601,13 +631,18 @@
       return {
         name: detail.querySelector('.prospect-name').value.trim(),
         rank: detail.querySelector('.prospect-rank').value,
-        conversation: detail.querySelector('.prospect-conversation').value.trim()
+        conversation: detail.querySelector('.prospect-conversation').value.trim(),
+        nextVisitPlan: detail.querySelector('.next-visit-plan').value,
+        nextVisitDate: detail.querySelector('.next-visit-date').value
       };
     });
 
-    if (prospectDetails.some(function(detail) { return !detail.name || !detail.rank || !detail.conversation; })) {
-      alert('見込詳細の「名前」「見込ランク」「メモ（会話内容）」をすべて入力してください。');
-      var firstMissing = document.querySelector('.prospect-name:invalid, .prospect-rank:invalid, .prospect-conversation:invalid');
+    if (prospectDetails.some(function(detail) {
+      return !detail.name || !detail.rank || !detail.conversation ||
+        (detail.nextVisitPlan === '予定日を選択する' && !detail.nextVisitDate);
+    })) {
+      alert('見込詳細の「名前」「見込ランク」「メモ（会話内容）」「次回訪問予定日」をすべて入力してください。');
+      var firstMissing = document.querySelector('.prospect-name:invalid, .prospect-rank:invalid, .prospect-conversation:invalid, .next-visit-date:invalid');
       if (firstMissing) firstMissing.focus();
       return;
     }
