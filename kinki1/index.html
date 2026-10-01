@@ -572,13 +572,13 @@
         '</div>' +
         '<div class="field">' +
           '<label class="field-label required" for="prospectRank' + i + '">見込みランク</label>' +
-          '<div class="help">見込みとしたお客様から契約を獲得できる可能性</div>' +
+          '<div class="help">契約までにかかる期間に応じて、S～Cランクを選んでください</div>' +
           '<select class="prospect-rank" id="prospectRank' + i + '" required>' +
             '<option value="">選択してください</option>' +
-            '<option value="S">S（契約を獲得できる可能性が90％以上）</option>' +
-            '<option value="A">A（契約を獲得できる可能性が70～80％）</option>' +
-            '<option value="B">B（契約を獲得できる可能性が50～60％）</option>' +
-            '<option value="C">C（契約を獲得できる可能性が30～40％）</option>' +
+            '<option value="S">S（今月中に契約獲得）</option>' +
+            '<option value="A">A（来月中に契約獲得）</option>' +
+            '<option value="B">B（3ヶ月以内に契約獲得）</option>' +
+            '<option value="C">C（半年以内に契約獲得）</option>' +
           '</select>' +
         '</div>' +
         '<div class="field">' +
@@ -764,4 +764,5 @@
 
 </body>
 </html>
+
 
