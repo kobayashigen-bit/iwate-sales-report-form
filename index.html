@@ -253,6 +253,7 @@
       <label class="field-label">ブロック活動時間</label>
       <select id="blockTime" class="time-select"></select>
     </div>
+    <div class="field"><label class="field-label" for="blockTravelTime">移動時間</label><select id="blockTravelTime" class="time-select"></select></div>
     <div class="grid2">
       <div class="field"><label class="field-label">訪問件数</label><input type="number" id="blockVisits" min="0"></div>
       <div class="field"><label class="field-label">在宅件数</label><div class="help">インターホンに出てくれた数（居留守含む）</div><input type="number" id="blockAtHome" min="0"></div>
@@ -271,6 +272,7 @@
   <div class="card activity-card" id="section-tenant">
     <div class="section-title">テナントイベント</div>
     <div class="field"><label class="field-label">テナントイベント活動時間</label><select id="tenantTime" class="time-select"></select></div>
+    <div class="field"><label class="field-label" for="tenantTravelTime">移動時間</label><select id="tenantTravelTime" class="time-select"></select></div>
     <div class="grid2">
       <div class="field"><label class="field-label">声掛け数</label><input type="number" id="tenantGreeting" min="0"></div>
       <div class="field"><label class="field-label">アプローチ数</label><div class="help">直接対面でお話しができた数</div><input type="number" id="tenantApproach" min="0"></div>
@@ -288,6 +290,7 @@
   <div class="card activity-card" id="section-internal">
     <div class="section-title">社内イベント</div>
     <div class="field"><label class="field-label">社内イベント活動時間</label><select id="internalTime" class="time-select"></select></div>
+    <div class="field"><label class="field-label" for="internalTravelTime">移動時間</label><select id="internalTravelTime" class="time-select"></select></div>
     <div class="grid2">
       <div class="field"><label class="field-label">アプローチ数</label><div class="help">直接対面でお話しができた数</div><input type="number" id="internalApproach" min="0"></div>
       <div class="field"><label class="field-label">プレゼン数</label><div class="help">互助会のプレゼンができた数</div><input type="number" id="internalPresent" min="0"></div>
@@ -302,6 +305,7 @@
   <div class="card activity-card" id="section-post">
     <div class="section-title">施行後訪問</div>
     <div class="field"><label class="field-label">施行後訪問活動時間</label><select id="postTime" class="time-select"></select></div>
+    <div class="field"><label class="field-label" for="postTravelTime">移動時間</label><select id="postTravelTime" class="time-select"></select></div>
     <div class="grid2">
       <div class="field"><label class="field-label">アプローチ数</label><div class="help">直接対面でお話しができた数</div><input type="number" id="postApproach" min="0"></div>
       <div class="field"><label class="field-label">プレゼン数</label><div class="help">互助会のプレゼンができた数</div><input type="number" id="postPresent" min="0"></div>
@@ -316,6 +320,7 @@
   <div class="card activity-card" id="section-existing">
     <div class="section-title">既存会員</div>
     <div class="field"><label class="field-label">既存会員活動時間</label><select id="existingTime" class="time-select"></select></div>
+    <div class="field"><label class="field-label" for="existingTravelTime">移動時間</label><select id="existingTravelTime" class="time-select"></select></div>
     <div class="grid2">
       <div class="field"><label class="field-label">訪問件数</label><input type="number" id="existingVisits" min="0"></div>
       <div class="field"><label class="field-label">アプローチ数</label><div class="help">直接対面でお話しができた数</div><input type="number" id="existingApproach" min="0"></div>
@@ -331,6 +336,7 @@
   <div class="card activity-card" id="section-other">
     <div class="section-title">その他新規</div>
     <div class="field"><label class="field-label">その他新規活動時間</label><select id="otherTime" class="time-select"></select></div>
+    <div class="field"><label class="field-label" for="otherTravelTime">移動時間</label><select id="otherTravelTime" class="time-select"></select></div>
     <div class="grid2">
       <div class="field"><label class="field-label">アプローチ数</label><div class="help">直接対面でお話しができた数</div><input type="number" id="otherApproach" min="0"></div>
       <div class="field"><label class="field-label">プレゼン数</label><div class="help">互助会のプレゼンができた数</div><input type="number" id="otherPresent" min="0"></div>
@@ -621,30 +627,30 @@
     var data = {
       area: area, branch: branch, staff: staff, date: date,
       timeSlot: timeSlot, activityTypes: activityTypes,
-      blockArea: v('blockArea'), blockTime: v('blockTime'),
+      blockArea: v('blockArea'), blockTime: v('blockTime'), blockTravelTime: v('blockTravelTime'),
       blockVisits: v('blockVisits'), blockAtHome: v('blockAtHome'),
       blockApproach: v('blockApproach'), blockPresent: v('blockPresent'),
       blockClosing: v('blockClosing'), blockProspect: v('blockProspect'),
       blockContract: v('blockContract'), blockContractCnt: v('blockContractCnt'),
       blockReserveFixed: v('blockReserveFixed'), blockReserveUnfixed: v('blockReserveUnfixed'),
-      tenantTime: v('tenantTime'), tenantGreeting: v('tenantGreeting'),
+      tenantTime: v('tenantTime'), tenantTravelTime: v('tenantTravelTime'), tenantGreeting: v('tenantGreeting'),
       tenantApproach: v('tenantApproach'), tenantPresent: v('tenantPresent'),
       tenantClosing: v('tenantClosing'), tenantProspect: v('tenantProspect'),
       tenantReserveFixed: v('tenantReserveFixed'), tenantReserveUnfixed: v('tenantReserveUnfixed'),
       tenantContract: v('tenantContract'), tenantContractCnt: v('tenantContractCnt'),
-      internalTime: v('internalTime'), internalApproach: v('internalApproach'),
+      internalTime: v('internalTime'), internalTravelTime: v('internalTravelTime'), internalApproach: v('internalApproach'),
       internalPresent: v('internalPresent'), internalClosing: v('internalClosing'),
       internalProspect: v('internalProspect'), internalContract: v('internalContract'),
       internalContractCnt: v('internalContractCnt'),
-      postTime: v('postTime'), postApproach: v('postApproach'),
+      postTime: v('postTime'), postTravelTime: v('postTravelTime'), postApproach: v('postApproach'),
       postPresent: v('postPresent'), postClosing: v('postClosing'),
       postProspect: v('postProspect'), postContract: v('postContract'),
       postContractCnt: v('postContractCnt'),
-      existingTime: v('existingTime'), existingVisits: v('existingVisits'),
+      existingTime: v('existingTime'), existingTravelTime: v('existingTravelTime'), existingVisits: v('existingVisits'),
       existingApproach: v('existingApproach'), existingPresent: v('existingPresent'),
       existingClosing: v('existingClosing'), existingProspect: v('existingProspect'),
       existingContract: v('existingContract'), existingContractCnt: v('existingContractCnt'),
-      otherTime: v('otherTime'), otherApproach: v('otherApproach'),
+      otherTime: v('otherTime'), otherTravelTime: v('otherTravelTime'), otherApproach: v('otherApproach'),
       otherPresent: v('otherPresent'), otherClosing: v('otherClosing'),
       otherReserveFixed: v('otherReserveFixed'), otherReserveUnfixed: v('otherReserveUnfixed'),
       otherProspect: v('otherProspect'), otherContract: v('otherContract'),
