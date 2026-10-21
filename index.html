@@ -426,6 +426,73 @@
   var MASTER = window.MASTER_DATA || null;
   var GAS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbzPVhV82WWSVr39_WTW92gfHy68MDQfKFOPZGlAknN0ttWRo1iY6BcDfY-hWPsQaigqLA/exec';
 
+  // 担当者メールシートのE列が「〇」または「○」のスタッフだけを読み込みます。
+  // 岩手フォームでは岩手1・岩手2・長崎を取得し、GitHub Pages上で一つにまとめます。
+  var ACTIVE_STAFF_AREAS = ['岩手1', '岩手2', '長崎'];
+
+  function loadActiveStaffArea(area) {
+    return new Promise(function(resolve, reject) {
+      var callbackName = 'receiveActiveStaffMaster_' + Date.now() + '_' +
+        Math.random().toString(36).slice(2);
+      var script = document.createElement('script');
+      var timeoutId = window.setTimeout(function() {
+        cleanup();
+        reject(new Error(area + 'の担当者一覧の読み込みがタイムアウトしました'));
+      }, 8000);
+
+      function cleanup() {
+        window.clearTimeout(timeoutId);
+        if (script.parentNode) script.parentNode.removeChild(script);
+        try {
+          delete window[callbackName];
+        } catch (err) {
+          window[callbackName] = undefined;
+        }
+      }
+
+      window[callbackName] = function(response) {
+        if (response && response.ok && response.master) {
+          var areaMaster = response.master;
+          cleanup();
+          resolve(areaMaster);
+          return;
+        }
+        cleanup();
+        reject(new Error(area + 'の有効な担当者一覧を取得できませんでした'));
+      };
+
+      script.onerror = function() {
+        cleanup();
+        reject(new Error(area + 'の担当者一覧の通信に失敗しました'));
+      };
+      script.src = GAS_ENDPOINT +
+        '?action=activeStaffMaster&area=' + encodeURIComponent(area) +
+        '&callback=' + encodeURIComponent(callbackName) +
+        '&_=' + Date.now();
+      document.head.appendChild(script);
+    });
+  }
+
+  function loadActiveStaffMaster() {
+    var requests = ACTIVE_STAFF_AREAS.map(function(area) {
+      return loadActiveStaffArea(area).catch(function() { return null; });
+    });
+
+    return Promise.all(requests).then(function(results) {
+      var liveMaster = {};
+      results.forEach(function(areaMaster) {
+        if (!areaMaster) return;
+        Object.keys(areaMaster).forEach(function(area) {
+          liveMaster[area] = areaMaster[area];
+        });
+      });
+      if (Object.keys(liveMaster).length === 0) {
+        throw new Error('有効な担当者一覧が空です');
+      }
+      MASTER = liveMaster;
+    });
+  }
+
   function initializeAreaOptions() {
     var areaEl = document.getElementById('area');
     if (!MASTER) {
@@ -441,7 +508,8 @@
     areaEl.disabled = false;
   }
 
-  initializeAreaOptions();
+  // 最新の有効スタッフを優先し、通信失敗時だけ上記の予備データを使います。
+  loadActiveStaffMaster().then(initializeAreaOptions, initializeAreaOptions);
 
   function onAreaChange() {
     var area     = document.getElementById('area').value;
