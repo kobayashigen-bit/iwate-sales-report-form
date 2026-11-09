@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>営業日報フォーム 編集メニュー</title>
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;background:#f3f6fb;color:#202124;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif}
+    main{max-width:760px;margin:0 auto;padding:28px 16px 48px}
+    h1{font-size:1.55rem;color:#1a73e8;margin:0 0 8px}
+    .lead{color:#5f6368;line-height:1.7;margin:0 0 24px}
+    .notice{background:#fff8e1;border-left:4px solid #f9ab00;padding:14px 16px;border-radius:6px;margin-bottom:18px;line-height:1.65}
+    .card{background:#fff;border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(60,64,67,.12)}
+    h2{font-size:1.1rem;margin:0 0 8px}
+    p,li{line-height:1.7}
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+    a.button{display:inline-block;text-decoration:none;padding:11px 16px;border-radius:8px;background:#1a73e8;color:#fff;font-weight:700}
+    a.button.secondary{background:#e8f0fe;color:#185abc}
+    ol{padding-left:1.4rem}
+    code{background:#f1f3f4;padding:2px 5px;border-radius:4px}
+    .small{font-size:.88rem;color:#5f6368}
+  </style>
+</head>
+<body>
+<main>
+  <h1>営業日報フォーム 編集メニュー</h1>
+  <p class="lead">このページからGitHubの編集画面を開き、フォームの文章や選択肢を自分で変更できます。保存後は現在のURLのままGitHub Pagesへ自動反映されます。</p>
+
+  <div class="notice">
+    GitHubへのログインが必要です。編集後は画面右上の <strong>Commit changes...</strong> を押し、<strong>Commit directly to the main branch</strong> で保存してください。
+  </div>
+
+  <section class="card">
+    <h2>岩手・長崎の日報</h2>
+    <p>タイトル、注釈、入力欄、選択肢などは <code>index.html</code> で管理しています。</p>
+    <div class="actions">
+      <a class="button" href="https://github.com/kobayashigen-bit/iwate-sales-report-form/edit/main/index.html" target="_blank" rel="noopener">編集する</a>
+      <a class="button secondary" href="https://kobayashigen-bit.github.io/iwate-sales-report-form/" target="_blank" rel="noopener">公開ページを確認</a>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>近畿1の日報</h2>
+    <p>近畿1版は <code>kinki1/index.html</code> で管理しています。</p>
+    <div class="actions">
+      <a class="button" href="https://github.com/kobayashigen-bit/iwate-sales-report-form/edit/main/kinki1/index.html" target="_blank" rel="noopener">編集する</a>
+      <a class="button secondary" href="https://kobayashigen-bit.github.io/iwate-sales-report-form/kinki1/" target="_blank" rel="noopener">公開ページを確認</a>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>更新手順</h2>
+    <ol>
+      <li>上の「編集する」を押します。</li>
+      <li>ブラウザの検索機能（Windowsは <code>Ctrl + F</code>）で変更したい文章を探します。</li>
+      <li>文章や選択肢を修正します。</li>
+      <li><strong>Commit changes...</strong> を押して保存します。</li>
+      <li>通常1〜3分後に公開ページへ反映されます。古い表示の場合は再読み込みしてください。</li>
+    </ol>
+    <p class="small">HTMLの <code>&lt;</code> と <code>&gt;</code> で囲まれた部分やJavaScriptを消すとフォームが動かなくなるため、文章だけを変更するときは文字部分だけを書き換えてください。GitHubの履歴からいつでも以前の状態へ戻せます。</p>
+  </section>
+
+  <section class="card">
+    <h2>スタッフ・メール・保存先の変更</h2>
+    <p><strong>スタッフ名：</strong>スプレッドシートの「担当者メール」で編集し、E列を〇にします。GitHubの更新は不要です。</p>
+    <p><strong>メール宛先・回答先シート：</strong>Google Apps Script側の設定です。HTMLだけを変更しても変わりません。</p>
+  </section>
+</main>
+</body>
+</html>
